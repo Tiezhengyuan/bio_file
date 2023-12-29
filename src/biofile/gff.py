@@ -1,13 +1,37 @@
 """
+process GFF file
+https://www.ncbi.nlm.nih.gov/genbank/genomes_gff/
 
 """
-from utils.threading import Threading
+from typing import Iterable
+import re
+
 
 
 class GFF:
+    def __init__(self, gff_file:str):
+        self.infile = gff_file
 
-    @staticmethod
-    def read_gff_files(self, gff_file, genome_name, gff_tag_name, outfile, fa_dict):
+    def iter(self) -> Iterable:
+        with open(self.infile, 'r') as f:
+            for line in f:
+                yield line.rstrip()
+
+
+    def read_gff(self):
+        gff_dict={}
+        in_obj=open(self.infile, 'r')
+        for line in in_obj:
+            line=line.rstrip()
+            contig_name, geneID, start,end=line.split('\t')
+            if contig_name not in gff_dict.keys():
+                gff_dict[contig_name]={}
+            gff_dict[contig_name][geneID]=(int(start),int(end))
+        in_obj.close()
+        return gff_dict
+    
+    # TODO: confirm testing in the future
+    def read_gff_files(self, genome_names, gff_tag_name, outfile, fa_dict):
         '''
         outfile is combine them into one gff file
         elicit from fasta and gff
@@ -16,7 +40,7 @@ class GFF:
         out_obj=open(outfile, 'w')  
         for name in genome_names:
             #read gene position
-            in_obj=open(gff_file, 'r')
+            in_obj=open(self.infile, 'r')
             for line in in_obj:
                 line = line.rstrip()
                 items=line.split('\t')
@@ -35,22 +59,6 @@ class GFF:
                                 out_obj.write("{}\n".format('\t'.join(out)))
                                 break
             in_obj.close()
-                    
-
         out_obj.close()
         return fa_dict        
 
-
-#
-    def read_gff(self, collinear_prefix):
-        gff_dict={}
-        in_obj=open(collinear_prefix+'.gff', 'r')
-        for line in in_obj:
-            line=line.rstrip()
-            contig_name, geneID, start,end=line.split('\t')
-            if contig_name not in gff_dict.keys():
-                gff_dict[contig_name]={}
-            gff_dict[contig_name][geneID]=(int(start),int(end))
-        in_obj.close()
-        #print([(x, len(gff_dict[x])) for x in gff_dict.keys()])
-        return gff_dict
