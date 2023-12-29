@@ -2,7 +2,7 @@
 Test class Utils
 '''
 from tests.helper import *
-from utils.utils import Utils
+from src.biofile.utils.utils import Utils
 
 @ddt
 class TestMap(TestCase):

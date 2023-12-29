@@ -2,7 +2,7 @@
 Test class Utils
 '''
 from tests.helper import *
-from utils.iterator import Iterator as c
+from src.biofile.utils.iterator import Iterator as c
 
 @ddt
 class TestIterator(TestCase):

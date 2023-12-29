@@ -94,7 +94,7 @@ class Map:
         for key,val in input.items():
             for v in val if isinstance(val, list) else [val,]:
                 if type(v) in (str, int, tuple):
-                    Utils.update_dict(new, v, key)
+                    Map.update_dict(new, v, key)
         return new
 
 

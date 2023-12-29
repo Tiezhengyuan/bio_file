@@ -3,7 +3,7 @@ Test class
 '''
 from tests.helper import *
 # from Bio import SeqIO, Seq, SeqRecord
-from bio_file.biofiles.fastq import FASTQ
+from src.biofile.fastq import FASTQ
 
 
 @ddt

@@ -2,7 +2,7 @@
 Test class 
 '''
 from tests.helper import *
-from biofiles.pubmed_xml import PubmedXml
+from src.biofile.pubmed_xml import PubmedXml
 
 
 @ddt

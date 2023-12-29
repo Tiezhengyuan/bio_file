@@ -1,7 +1,7 @@
 """
 
 """
-from biofiles.fastq import FASTQ
+from .fastq import FASTQ
 from utils.file import File
 
 class Sample:

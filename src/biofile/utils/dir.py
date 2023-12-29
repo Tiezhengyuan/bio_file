@@ -1,5 +1,5 @@
 
-import os, sys
+import os
 import re
 
 class Dir:

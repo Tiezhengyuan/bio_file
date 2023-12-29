@@ -2,7 +2,7 @@
 Test class 
 '''
 from tests.helper import *
-from utils.file import File
+from src.biofile.utils.file import File
 
 
 @ddt
