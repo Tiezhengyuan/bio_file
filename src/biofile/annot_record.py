@@ -1,22 +1,23 @@
 """
-define annotation record
-
+define annotation record: one recored, and one line in GTF/GFF
 """
-from typing import Iterable
 import re
 
 class AnnotRecord:
-    names = ['seqid', 'source', 'feature', 'start', 'end',  'score', 'strand', 'phase', 'attributes',]
     # column 1-9 in GTF/GFF
-    seqid = None
-    source = None
-    feature = None
-    start = None
-    end = None
-    score = None
-    strand = None
-    phase = None
-    attributes = None
+    names = ['seqid', 'source', 'feature', 'start', 'end', \
+        'score', 'strand', 'phase', 'attributes',]
+
+    def __init__(self):
+        self.seqid = None
+        self.source = None
+        self.feature = None
+        self.start = None
+        self.end = None
+        self.score = None
+        self.strand = None
+        self.phase = None
+        self.attributes = None
 
     def parse(self, record_line:str):
         items = record_line.split('\t')
@@ -26,6 +27,7 @@ class AnnotRecord:
             self.start = int(self.start)
         if self.end:
             self.end = int(self.end)
+        return self
 
     def parse_gtf_attributes(self):
         '''
@@ -52,5 +54,8 @@ class AnnotRecord:
         return attr
 
     def to_dict(self) -> dict:
-        rec = dict([(k, getattr(self, k)) for k in self.names])
-        return rec
+        return dict([(k, getattr(self, k)) for k in self.names])
+
+    def to_dict_simple(self) -> dict:
+        names = ['seqid', 'start', 'end', 'strand',]
+        return dict([(k, getattr(self, k)) for k in names])

@@ -1,6 +1,4 @@
-from unittest import TestCase
-from ddt import ddt, data, unpack
-
+from tests.helper import *
 from src.biofile import AnnotRecord
 
 GFF_LINE = "sequence001	mine	CDS	190	252	.	+	0	ID=CDS0;Parent=gene0;Dbxref=UniProtKB/Swiss-Prot:P0AD86;product=formate dehydrogenase isoform 1;transl_except=(pos:193..195%2Caa:Sec);inference=COORDINATES:similar to AA sequence:INSD:AAC73526.1"
