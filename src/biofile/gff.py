@@ -53,10 +53,15 @@ class GFF(AnnotFile):
                     if attr == i['name']:
                         key = i['value']
             if key and feature in ('_all_', c.feature):
-                if key in annot:
-                    annot[key].update(item)
-                else:
-                    annot[key] = item
+                curr = annot.get(key, {})
+                for k, v in item.items():
+                    v = str(v)
+                    if k in curr:
+                        if v not in curr[k]:
+                            curr[k] += f",{v}"
+                    else:
+                        curr[k] = v
+                annot[key] = curr
         if annot:
             self.to_text(annot, file_name)
         return annot

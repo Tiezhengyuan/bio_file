@@ -48,7 +48,7 @@ class Map:
         merged = deepcopy(d1)
         for k in d1:
             if k in d2:
-                Utils.update_dict(merged, k, d2[k])
+                Map.update_dict(merged, k, d2[k])
                 del d2[k]
         if d2:
             merged.update(d2)

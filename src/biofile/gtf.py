@@ -31,3 +31,38 @@ class GTF(AnnotFile):
 
         res = self.to_json(annot)
         return res
+
+    def parse_attributes(self, attr:str, feature:str=None, file_name:str=None) -> dict:
+        feature = '_all_' if feature is None else feature
+        file_name = f"{attr}_{feature}" if file_name is None else file_name
+
+        annot = {}
+        for line in self.iterator():
+            key = None
+            c = AnnotRecord().parse(line)
+            item = c.to_dict_simple()
+            attributes = c.parse_gtf_attributes()
+            for i in attributes:
+                if i['name'] == 'db_xref' and ':' in i['value']:
+                    _items = i['value'].split(':')
+                    name2, value2 = _items[0], _items[-1]
+                    item[name2] = value2
+                    if attr == name2:
+                        key = value2
+                else:
+                    item[i['name']] = i['value']
+                    if attr == i['name']:
+                        key = i['value']
+            if key and feature in ('_all_', c.feature):
+                curr = annot.get(key, {})
+                for k, v in item.items():
+                    v = str(v)
+                    if k in curr:
+                        if v not in curr[k]:
+                            curr[k] += f",{v}"
+                    else:
+                        curr[k] = v
+                annot[key] = curr
+        if annot:
+            self.to_text(annot, file_name)
+        return annot
