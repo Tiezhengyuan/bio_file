@@ -8,18 +8,16 @@ from src.biofile.fastq import FASTQ
 
 @ddt
 class Test_(TestCase):
-    def setUp(self):
-        self.c = FASTQ()
-
 
     @data(
         ['1_control_18S_2019_minq7.fastq'],
-        ['left.fastq']
+        ['left.fastq'],
     )
     @unpack
-    def test_read_fq(self, input):
-        infile = os.path.join(DIR_DATA, input)
-        iter = self.c.read_fq(infile)
+    @mock.patch.dict(os.environ, {'DIR_DATA': DIR_DATA})
+    def test_parse_records(self, input):
+        fq_file = os.path.join(DIR_DATA, input)
+        iter = FASTQ().parse_records(fq_file)
         res = next(iter)
         assert len(res.seq) > 50
 
@@ -28,10 +26,10 @@ class Test_(TestCase):
         ['left.fastq', 'right.fastq'],
     )
     @unpack
-    def test_read_pair(self, fq1_file, fq2_file):
+    def test_parse_pair_records(self, fq1_file, fq2_file):
         f1 = os.path.join(DIR_DATA, fq1_file)
         f2 = os.path.join(DIR_DATA, fq2_file)
-        iter = self.c.read_pair(f1, f2)
+        iter = FASTQ().parse_pair_records(f1, f2)
         res = next(iter)
         assert len(res[0].seq) > 50
 
@@ -40,11 +38,11 @@ class Test_(TestCase):
         ['left.fastq'],
     )
     @unpack
-    @mock.patch.dict(os.environ, env)
+    @mock.patch.dict(os.environ, {'DIR_DATA': DIR_DATA, 'DIR_CACHE': DIR_TMP})
     def test_quality_scores(self, input):
         infile = os.path.join(DIR_DATA, input)
-        iter = self.c.read_fq(infile)
-        self.c.quality_scores(iter)
+        iter = FASTQ().parse_records(infile)
+        FASTQ().quality_scores(iter)
 
     @data(
         ['left.fastq', True],
@@ -53,8 +51,8 @@ class Test_(TestCase):
         ['dna.fa', False],
     )
     @unpack
-    @mock.patch.dict(os.environ, env)
+    @mock.patch.dict(os.environ, {'DIR_CACHE': DIR_TMP})
     def test_is_fastq(self, input, expect):
         infile = os.path.join(DIR_DATA, input)
-        res = self.c.is_fastq(infile)
+        res = FASTQ().is_fastq(infile)
         assert res == expect
