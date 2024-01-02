@@ -1,10 +1,9 @@
-# bio_file
+# Bioinformatics Tool: bioFile
 
 ## Introduction
 Retrieve data from various file formats used in RNA-Seq data analysis. The tool currently support:
 - GTF file: genomic annotations
 - GFF file: genomic annoations
-- SAM: sequence alignment
 
 quick installation
 ```
