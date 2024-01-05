@@ -38,3 +38,4 @@ class AnnotFile:
             outfile = os.path.join(self.outdir, f"{file_name}.txt")
             df.to_csv(outfile, sep='\t', header=True, \
                 index=True, index_label='attributes')
+    

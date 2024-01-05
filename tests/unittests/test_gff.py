@@ -44,3 +44,18 @@ class TestGFF(TestCase):
         res = GFF(gff_file, DIR_TMP).parse_attributes(attr, feature)
         assert len(res) == expect
 
+    @data(
+        ['ID', 'gene-TRNT', {'seqid': 'NC_012920.1', 'source': 'RefSeq', 'feature': 'gene', \
+            'start': 15888, 'end': 15953, 'score': '.', 'strand': '+', 'phase': '.', 
+            'attributes': 'ID=gene-TRNT;Dbxref=GeneID:4576,HGNC:HGNC:7499,MIM:590090;Name=TRNT;gbkey=Gene;gene=TRNT;gene_biotype=tRNA;gene_synonym=MTTT',\
+            'ID': 'gene-TRNT'}],
+        ['GeneID', 'GeneID:4576', {'seqid': 'NC_012920.1', 'source': 'RefSeq', 'feature': 'gene', \
+            'start': 15888, 'end': 15953, 'score': '.', 'strand': '+', 'phase': '.', 
+            'attributes': 'ID=gene-TRNT;Dbxref=GeneID:4576,HGNC:HGNC:7499,MIM:590090;Name=TRNT;gbkey=Gene;gene=TRNT;gene_biotype=tRNA;gene_synonym=MTTT',\
+            'ID': 'GeneID:4576'}],
+    )
+    @unpack
+    def test_lift_attributes(self, name, key, expect):
+        infile = os.path.join(DIR_DATA, 'gff_gene.json')
+        res = GFF(infile).lift_attribute(name)
+        assert res[key] == expect

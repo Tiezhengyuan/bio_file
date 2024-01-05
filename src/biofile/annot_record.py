@@ -29,21 +29,30 @@ class AnnotRecord:
             self.end = int(self.end)
         return self
 
-    def parse_gtf_attributes(self):
+    def to_dict(self) -> dict:
+        return dict([(k, getattr(self, k)) for k in self.names])
+
+    def to_dict_simple(self) -> dict:
+        names = ['seqid', 'start', 'end', 'strand',]
+        return dict([(k, getattr(self, k)) for k in names])
+
+    @staticmethod
+    def parse_gtf_attributes(attributes:str):
         '''
         GTF attributes
         '''
-        names = re.findall('([a-zA-Z0-9_]+)\\s\"', self.attributes)
-        values = re.findall('\"([a-zA-Z0-9_\\.\\%\\:\\(\\)\\-\\,\\/\\s]*?)\"', self.attributes)
+        names = re.findall('([a-zA-Z0-9_]+)\\s\"', attributes)
+        values = re.findall('\"([a-zA-Z0-9_\\.\\%\\:\\(\\)\\-\\,\\/\\s]*?)\"', attributes)
         attr = [{'name': k, 'value': v} for k, v in zip(names, values)]
         return attr
-
-    def parse_gff_attributes(self):
+    
+    @staticmethod
+    def parse_gff_attributes(attributes):
         '''
         GFF attributes
         '''
-        names = re.findall('([a-zA-Z0-9_]+)=', self.attributes)
-        values = re.findall('=([a-zA-Z0-9_\\.\\s\\:\\/\\-\\%\\(\\)\\,\'\\[\\]\\{\\}]+)', self.attributes)
+        names = re.findall('([a-zA-Z0-9_]+)=', attributes)
+        values = re.findall('=([a-zA-Z0-9_\\.\\s\\:\\/\\-\\%\\(\\)\\,\'\\[\\]\\{\\}]+)', attributes)
         attr = []
         for k, v in zip(names, values):
             if k == 'Dbxref' and ',' in v:
@@ -52,10 +61,3 @@ class AnnotRecord:
             else:
                 attr.append({'name': k, 'value': v})
         return attr
-
-    def to_dict(self) -> dict:
-        return dict([(k, getattr(self, k)) for k in self.names])
-
-    def to_dict_simple(self) -> dict:
-        names = ['seqid', 'start', 'end', 'strand',]
-        return dict([(k, getattr(self, k)) for k in names])

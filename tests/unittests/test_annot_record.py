@@ -97,9 +97,7 @@ class TestAnnotRecord(TestCase):
     )
     @unpack
     def test_parse_gtf_attributes(self, input, expect):
-        c = AnnotRecord()
-        c.attributes = input
-        res = c.parse_gtf_attributes()
+        res = AnnotRecord.parse_gtf_attributes(input)
         assert res == expect
 
     @data(
@@ -151,7 +149,5 @@ class TestAnnotRecord(TestCase):
     )
     @unpack
     def test_parse_gff_attributes(self, input, expect):
-        c = AnnotRecord()
-        c.attributes = input
-        res = c.parse_gff_attributes()
+        res = AnnotRecord.parse_gff_attributes(input)
         assert res == expect

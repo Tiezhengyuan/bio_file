@@ -44,3 +44,18 @@ class TestGTF(TestCase):
         res = GTF(gff_file, DIR_TMP).parse_attributes(attr, feature)
         assert len(res) == expect
 
+    @data(
+        ['gene_id', 'MIR6859-1', {'seqid': 'NC_000001.11', 'source': 'BestRefSeq', \
+            'feature': 'gene', 'start': 17369, 'end': 17436, 'score': '.', 'strand': '-', 'phase': '.', \
+            'attributes': 'gene_id "MIR6859-1"; transcript_id ""; db_xref "GeneID:102466751"; db_xref "HGNC:HGNC:50039"; db_xref "miRBase:MI0022705"; description "microRNA 6859-1"; gbkey "Gene"; gene "MIR6859-1"; gene_biotype "miRNA"; gene_synonym "hsa-mir-6859-1";', \
+            'ID': 'MIR6859-1'}],
+        ["GeneID", "GeneID:102466751", {'seqid': 'NC_000001.11', 'source': 'BestRefSeq', \
+            'feature': 'gene', 'start': 17369, 'end': 17436, 'score': '.', 'strand': '-', 'phase': '.', \
+            'attributes': 'gene_id "MIR6859-1"; transcript_id ""; db_xref "GeneID:102466751"; db_xref "HGNC:HGNC:50039"; db_xref "miRBase:MI0022705"; description "microRNA 6859-1"; gbkey "Gene"; gene "MIR6859-1"; gene_biotype "miRNA"; gene_synonym "hsa-mir-6859-1";', \
+            'ID': 'GeneID:102466751'}],
+    )
+    @unpack
+    def test_lift_attributes(self, attr, key, expect):
+        infile = os.path.join(DIR_DATA, 'gtf_gene.json')
+        res = GTF(infile).lift_attribute(attr)
+        assert res[key] == expect
