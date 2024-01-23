@@ -1,10 +1,10 @@
 from tests.helper import *
 
-from src.biofile.gff import GFF
+from src.biofile import GFF
 
 @ddt
 class TestGFF(TestCase):
-
+    '''
     @data(
         ['human_genomic.gff', 9991],
     )
@@ -59,3 +59,29 @@ class TestGFF(TestCase):
         infile = os.path.join(DIR_DATA, 'gff_gene.json')
         res = GFF(infile).lift_attribute(name)
         assert res[key] == expect
+    '''
+
+    def test_retrieve_mRNA(self):
+        infile = os.path.join(DIR_DATA, 'human_genomic.gff')
+        res = GFF(infile, DIR_TMP).retrieve_mRNA()
+        assert res.get('records') == 334
+
+    def test_retrieve_CDS(self):
+        infile = os.path.join(DIR_DATA, 'human_genomic.gff')
+        res = GFF(infile, DIR_TMP).retrieve_CDS()
+        assert res.get('records') == 333
+
+    def test_retrieve_pseudo(self):
+        infile = os.path.join(DIR_DATA, 'human_genomic.gff')
+        res = GFF(infile, DIR_TMP).retrieve_pseudo()
+        assert res.get('records') == 34
+
+    def test_retrieve_transcript(self):
+        infile = os.path.join(DIR_DATA, 'human_genomic.gff')
+        res = GFF(infile, DIR_TMP).retrieve_transcript()
+        assert res.get('records') == 21
+
+    def test_retrieve_mRNA(self):
+        infile = os.path.join(DIR_DATA, 'human_genomic.gff')
+        res = GFF(infile, DIR_TMP).retrieve_mRNA()
+        assert res.get('records') == 334

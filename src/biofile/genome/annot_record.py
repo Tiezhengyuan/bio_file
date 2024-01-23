@@ -43,8 +43,8 @@ class AnnotRecord:
         '''
         names = re.findall('([a-zA-Z0-9_]+)\\s\"', attributes)
         values = re.findall('\"([a-zA-Z0-9_\\.\\%\\:\\(\\)\\-\\,\\/\\s]*?)\"', attributes)
-        attr = [{'name': k, 'value': v} for k, v in zip(names, values)]
-        return attr
+        attr_list = [{'name': k, 'value': v} for k, v in zip(names, values)]
+        return attr_list
     
     @staticmethod
     def parse_gff_attributes(attributes):
@@ -53,11 +53,28 @@ class AnnotRecord:
         '''
         names = re.findall('([a-zA-Z0-9_]+)=', attributes)
         values = re.findall('=([a-zA-Z0-9_\\.\\s\\:\\/\\-\\%\\(\\)\\,\'\\[\\]\\{\\}]+)', attributes)
-        attr = []
+        attr_list = []
         for k, v in zip(names, values):
             if k == 'Dbxref' and ',' in v:
                 for v2 in v.split(','):
-                    attr.append({'name': k, 'value': v2})
+                    attr_list.append({'name': k, 'value': v2})
             else:
-                attr.append({'name': k, 'value': v})
+                attr_list.append({'name': k, 'value': v})
+        return attr_list
+
+    @staticmethod
+    def map_gff_attributes(attributes):
+        '''
+        GFF attributes
+        '''
+        names = re.findall('([a-zA-Z0-9_]+)=', attributes)
+        values = re.findall('=([a-zA-Z0-9_\\.\\s\\:\\/\\-\\%\\(\\)\\,\'\\[\\]\\{\\}]+)', attributes)
+        attr = {}
+        for k, v in zip(names, values):
+            if k == 'Dbxref' and ',' in v:
+                for sub_feature in v.split(','):
+                    sub_k, sub_v = sub_feature.split(':', 1)
+                    attr[sub_k] = sub_v
+            else:
+                attr[k] = v
         return attr

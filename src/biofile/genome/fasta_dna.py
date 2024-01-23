@@ -5,6 +5,7 @@ example: >id
 '''
 from Bio import SeqIO
 import os
+import re
 from .base import Base
 
 class FastaDNA(Base):
@@ -52,20 +53,26 @@ class FastaDNA(Base):
         if not infile:
             return None
 
-        n = 0
+        n,m = 0, 0
         outfile = os.path.join(self.outdir, f'{molecular_type}.fna')
         with open(outfile, 'w') as f:
             for rec in SeqIO.parse(infile, 'fasta'):
-                rec.id = rec.id.split('|')[-1]
-                rec.description = ''
-                SeqIO.write(rec, f, 'fasta-2line')
-                n += 1
+                protein_id = re.findall('\\[protein_id=([A-Z_0-9\.]*)\\]', str(rec.description))
+                if protein_id:
+                    rec.id = protein_id[0] 
+                    rec.description = ''
+                    SeqIO.write(rec, f, 'fasta-2line')
+                    n += 1
+                else:
+                    m += 1
         meta = {
             'infile': infile,
             'outfile': outfile,
             'file_format': 'fna',
             'molecule_type': molecular_type,
             'records': n,
+            # pseudo, curated genomic CDS are excluded
+            'records_others': m,
         }
         return meta
 
@@ -75,7 +82,7 @@ class FastaDNA(Base):
         file: *_pseudo_without_product.fna
         output: pseudo.fna
         '''
-        molecular_type = 'pseudo'
+        molecular_type = 'pseudogene'
         infile = self.get_infile('_pseudo_without_product.fna')
         if not infile:
             return None

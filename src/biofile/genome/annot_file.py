@@ -17,7 +17,7 @@ class AnnotFile:
                 if not line.startswith('#'):
                     yield line.rstrip()
 
-    def to_json(self, annot:dict):
+    def to_json_files(self, annot:dict):
         '''
         annot: key~value: file name ~ records in list
         '''
@@ -39,3 +39,15 @@ class AnnotFile:
             df.to_csv(outfile, sep='\t', header=True, \
                 index=True, index_label='attributes')
     
+    def to_json(self, annot:dict, molecular_type:str):
+        outfile = os.path.join(self.outdir, f"{molecular_type}.json")
+        with open(outfile, 'w') as f:
+            json.dump(annot, f, indent=4)
+        meta = {
+            'infile': self.infile,
+            'outfile': outfile,
+            'file_format': 'json',
+            'molecule_type': molecular_type,
+            'records': len(annot),
+        }
+        return meta

@@ -1,6 +1,6 @@
 from tests.helper import *
 
-from src.biofile.gtf import GTF
+from src.biofile import GTF
 
 @ddt
 class TestGTF(TestCase):
@@ -59,3 +59,5 @@ class TestGTF(TestCase):
         infile = os.path.join(DIR_DATA, 'gtf_gene.json')
         res = GTF(infile).lift_attribute(attr)
         assert res[key] == expect
+
+    
