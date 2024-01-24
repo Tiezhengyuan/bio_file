@@ -28,31 +28,38 @@ class Wrap:
         return output
 
     def ncbi_fa_gff(self) -> list:
-    
+        '''
+        parse sequence and annotations
+        retreive NCBI molecular annotations
+        '''
         meta = []
         fd = FastaDNA(self.local_files, self.outdir)
         # RNA.fna
-        res = fd.ncbi_rna_dna()
-        meta.append(res)
+        meta_fa_rna = fd.ncbi_rna_dna()
+        meta.append(meta_fa_rna)
         # mRNA.fna
-        res = fd.ncbi_rna_dna('mRNA')
-        meta.append(res)
+        meta_fa_mrna = fd.ncbi_rna_dna('mRNA')
+        meta.append(meta_fa_mrna)
         # CDS.fna
-        res = fd.ncbi_cds()
-        meta.append(res)
+        meta_fa_cds = fd.ncbi_cds()
+        meta.append(meta_fa_cds)
         # pseudogene.fna
-        res = fd.ncbi_pseudo()
-        meta.append(res)
+        meta_fa_pseudo = fd.ncbi_pseudo()
+        meta.append(meta_fa_pseudo)
 
         gff_file = fd.get_infile('_genomic.gff')
         if gff_file:
             gff = GFF(gff_file, self.outdir)
-            res = gff.retrieve_RNA()
-            meta.append(res)
-            res = gff.retrieve_mRNA()
-            meta.append(res)
-            res = gff.retrieve_CDS()
-            meta.append(res)
-            res = gff.retrieve_pseudo()
-            meta.append(res)
+            meta_gff_rna = gff.retrieve_RNA()
+            if meta_gff_rna:
+                meta.append(meta_gff_rna)
+            meta_gff_mrna = gff.retrieve_mRNA()
+            if meta_gff_mrna:
+                meta.append(meta_gff_mrna)
+            meta_gff_cds = gff.retrieve_CDS()
+            if meta_gff_cds:
+                meta.append(meta_gff_cds)
+            meta_gff_pseudo = gff.retrieve_pseudo()
+            if meta_gff_pseudo:
+                meta.append(meta_gff_pseudo)
         return meta

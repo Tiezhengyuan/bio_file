@@ -47,7 +47,7 @@ class AnnotFile:
             'infile': self.infile,
             'outfile': outfile,
             'file_format': 'json',
-            'molecule_type': molecular_type,
+            'molecular_type': molecular_type,
             'records': len(annot),
         }
         return meta
