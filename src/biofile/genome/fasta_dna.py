@@ -12,7 +12,7 @@ class FastaDNA(Base):
     def __init__(self, local_files:str, outdir:str) -> None:
         super().__init__(local_files, outdir)
 
-    def ncbi_rna_dna(self, molecule_type:str=None):
+    def ncbi_rna_dna(self, molecular_type:str=None):
         '''
         args: molecular_type: RNA, mRNA
         data source: NCBI
@@ -22,14 +22,14 @@ class FastaDNA(Base):
         infile = self.get_infile('_rna.fna')
         if not infile:
             return None
-        if molecule_type is None:
-            molecule_type = 'RNA'
+        if molecular_type is None:
+            molecular_type = 'RNA'
 
         n = 0
-        outfile = os.path.join(self.outdir, f'{molecule_type}.fna')
+        outfile = os.path.join(self.outdir, f'{molecular_type}.fna')
         with open(outfile, 'w') as f:
             for rec in SeqIO.parse(infile, 'fasta'):
-                if molecule_type == 'RNA' or molecule_type in rec.description:
+                if molecular_type == 'RNA' or molecular_type in rec.description:
                     rec.description = ''
                     SeqIO.write(rec, f, 'fasta-2line')
                     n += 1
@@ -37,7 +37,7 @@ class FastaDNA(Base):
             'infile': infile,
             'outfile': outfile,
             'file_format': 'fna',
-            'molecule_type': molecule_type,
+            'molecular_type': molecular_type,
             'records': n,
         }
         return meta
@@ -57,7 +57,7 @@ class FastaDNA(Base):
         outfile = os.path.join(self.outdir, f'{molecular_type}.fna')
         with open(outfile, 'w') as f:
             for rec in SeqIO.parse(infile, 'fasta'):
-                protein_id = re.findall('\\[protein_id=([A-Z_0-9\.]*)\\]', str(rec.description))
+                protein_id = re.findall('\\[protein_id=([A-Z_0-9\\.]*)\\]', str(rec.description))
                 if protein_id:
                     rec.id = protein_id[0] 
                     rec.description = ''
@@ -69,7 +69,7 @@ class FastaDNA(Base):
             'infile': infile,
             'outfile': outfile,
             'file_format': 'fna',
-            'molecule_type': molecular_type,
+            'molecular_type': molecular_type,
             'records': n,
             # pseudo, curated genomic CDS are excluded
             'records_others': m,
@@ -99,7 +99,7 @@ class FastaDNA(Base):
             'infile': infile,
             'outfile': outfile,
             'file_format': 'fna',
-            'molecule_type': molecular_type,
+            'molecular_type': molecular_type,
             'records': n,
         }
         return meta

@@ -12,4 +12,7 @@ class TestWrap(TestCase):
             os.path.join(DIR_TMP, 'GCF_000001405.40_GRCh38.p14_pseudo_without_product.fna'),
             os.path.join(DIR_TMP, 'GCF_000001405.40_GRCh38.p14_genomic.gff'),
         ]
-        Wrap(local_files, DIR_TMP).ncbi_fa_gff()
+        w = Wrap(local_files, DIR_TMP)
+        output = w.load_output()
+        meta = w.ncbi_fa_gff()
+        output = w.save_output(meta, True)
