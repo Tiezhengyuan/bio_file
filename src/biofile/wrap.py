@@ -1,6 +1,7 @@
 
 import json
 import os
+
 from .genome.fasta_dna import FastaDNA
 from .genome.gff import GFF
 

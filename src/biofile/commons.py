@@ -31,3 +31,4 @@ class Commons:
         for key in sorted(indict.keys()):
             print('{:5}: {:10}\t{}'.format(n, key, indict[key]))
             n += 1
+        print(f'Numberof key-value pairs: {n}')

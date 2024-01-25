@@ -1,7 +1,7 @@
 """
 """
 from Bio import Entrez
-from .utils.commons import Commons
+from .commons import Commons
 
 class PubmedXml(Commons):
 

@@ -1,8 +1,9 @@
 """
 
 """
+from biosequtils import File
 from .fastq import FASTQ
-from utils.file import File
+
 
 class Sample:
 

@@ -2,12 +2,13 @@
 processs FASTQ 
 """
 from Bio import SeqIO
+from biosequtils import Iterator
 import os
 import numpy as np
 from typing import Iterable
 import gzip
 
-from .utils.iterator import Iterator
+
 
 class FASTQ:
     def __init__(self):

@@ -1,3 +1,4 @@
 Bio
+biosequtils
 numpy
 pandas
