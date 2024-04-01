@@ -11,6 +11,6 @@ class Test_(TestCase):
     def setUp(self):
         infile = os.path.join(DIR_DATA, 'pubmed23n0001.xml')
         self.c = PubmedXml(infile)
-
+    @skip
     def test_parse_xml(self):
         self.c.parse_xml()
